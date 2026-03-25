@@ -6,7 +6,7 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:29:01 by asato             #+#    #+#             */
-/*   Updated: 2026/03/24 18:46:21 by asato            ###   ########.fr       */
+/*   Updated: 2026/03/25 17:24:56 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ typedef struct s_data
 	int	time_to_sleep;
 	int	number_of_eat;
 	int	number_of_fork;
-	int			current_time;
+	int	current_time;
+	bool		stop_program;
 	pthread_mutex_t	*forks;
-
 }				t_data;
 
 typedef struct s_philo
@@ -37,14 +37,41 @@ typedef struct s_philo
 	t_data	*data;
 	int	last_time_to_eat;
 	int	count_meal;
-	int	current_time;
-	bool	dead;
+	bool	is_dead;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
 	struct s_philo	*next;
 }				t_philo;
 
-// pthread_mutex_t	mutex;
+// typedef struct s_top
+// {
+// 	bool		stop_program;
+// 	t_philo		*philos;
+// }				t_top;
+
+
+
+
+void *monitoring(void *arg)
+{
+	t_philo *philo = (t_philo *)arg;
+	t_data	*data = philo->data;
+	t_philo	*current = philo;
+	while (1)
+	{
+		current = philo;
+		while (current != NULL)
+		{
+			if (current->is_dead == true)
+			{
+				data->stop_program = true;
+				return (data->stop_program = true, NULL) ;
+			}
+			current = current->next;
+		}
+	}
+	return (NULL) ;
+}
 
 void *routine(void *arg)
 {
@@ -56,127 +83,64 @@ void *routine(void *arg)
 
 	printf("Thread %d has started\n", philo->id);
 
-	while (!philo->dead)
+	while (philo->is_dead == false)
 	{
-
-
-			if (philo->id % 2 == 0)
-			{
-
-				pthread_mutex_init(philo->right_fork, NULL);
-				pthread_mutex_init(philo->left_fork, NULL);
-
-				// 		// if (philo->data->number_of_fork > 1)
-				// 		// {
-
-
-				// 		// gettimeofday(&start_time, NULL);
-				pthread_mutex_lock(philo->right_fork);
-				philo->data->number_of_fork -= 1;
-				// printf("%d %d has taken a right fork\n", philo->data->current_time, philo->id);
-				pthread_mutex_lock(philo->left_fork);
-				philo->data->number_of_fork -= 1;
-				printf("%d %d has taken a fork\n", philo->data->current_time, philo->id);
-				printf("%d %d is eating\n", philo->current_time, philo->id);
-				philo->count_meal += 1;
-				usleep(philo->data->time_to_eat * 1000);
-				philo->current_time += philo->data->time_to_eat;
-				pthread_mutex_unlock(philo->right_fork);
-				pthread_mutex_unlock(philo->left_fork);
-				gettimeofday(&end_time, NULL);
-			}
-			else
-			{
-				gettimeofday(&start_time, NULL);
-				printf("%d %d is thinking\n", philo->current_time, philo->id);
-				usleep(5000);
-
-				gettimeofday(&end_time, NULL);
-				diff = (end_time.tv_sec - start_time.tv_sec) * 1000 + (end_time.tv_usec - start_time.tv_usec) / 1000; //millisec
-				philo->current_time += diff;
-			}
-			// 		// philo->data->number_of_fork += 2;
-
-			printf("%d %d is sleeping\n", philo->current_time, philo->id);
-			usleep(philo->data->time_to_sleep * 1000);
-			philo->current_time += philo->data->time_to_sleep;
-
-
-			pthread_mutex_init(philo->right_fork, NULL);
-			pthread_mutex_init(philo->left_fork, NULL);
-
-			// 		// if (philo->data->number_of_fork > 1)
-			// 		// {
-
-
-			// 		// gettimeofday(&start_time, NULL);
+		if (philo->id % 2 == 0)
+		{
 			pthread_mutex_lock(philo->right_fork);
-			philo->data->number_of_fork -= 1;
-			// printf("%d %d has taken a right fork\n", philo->data->current_time, philo->id);
 			pthread_mutex_lock(philo->left_fork);
-			philo->data->number_of_fork -= 1;
 			printf("%d %d has taken a fork\n", philo->data->current_time, philo->id);
-			printf("%d %d is eating\n", philo->current_time, philo->id);
-			philo->count_meal += 1;
-			usleep(philo->data->time_to_eat * 1000);
-			philo->current_time += philo->data->time_to_eat;
-			pthread_mutex_unlock(philo->right_fork);
-			pthread_mutex_unlock(philo->left_fork);
-			gettimeofday(&end_time, NULL);
+		}
+		else
+		{
+			usleep(1000);
+			pthread_mutex_lock(philo->left_fork);
+			pthread_mutex_lock(philo->right_fork);
+			printf("%d %d has taken a fork\n", philo->data->current_time, philo->id);
+		}
 
-			gettimeofday(&now, NULL);
-			diff = (now.tv_sec - end_time.tv_sec) * 1000 + (now.tv_usec - end_time.tv_usec) / 1000; //millisec
-			if (diff > philo->data->time_to_die)
-			return (printf("%d %d died\n", philo->current_time, philo->id), philo->dead = false,
-			pthread_mutex_destroy(philo->right_fork), pthread_mutex_destroy(philo->left_fork), NULL);
+		printf("%d %d is eating\n", philo->data->current_time, philo->id);
+		philo->count_meal += 1;
+		usleep(philo->data->time_to_eat * 1000);
+		philo->data->current_time += philo->data->time_to_eat;
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+		gettimeofday(&end_time, NULL);
 
-			// 	// 	while (philo->data->number_of_fork == 0)
-			// 	// 		printf("%d %d is thinking\n", philo->current_time, philo->id);
+		gettimeofday(&now, NULL);
+		diff = (now.tv_sec - end_time.tv_sec) * 1000 + (now.tv_usec - end_time.tv_usec) / 1000; //millisec
+		if (diff > philo->data->time_to_die)
+		return (printf("%d %d died\n", philo->data->current_time, philo->id), philo->is_dead = true, philo->data->stop_program = true, NULL);
 
-			gettimeofday(&now, NULL);
-			diff = (now.tv_sec - end_time.tv_sec) * 1000 + (now.tv_usec - end_time.tv_usec) / 1000; //millisec
-			if (diff > philo->data->time_to_die)
-			return (printf("%d %d died\n", philo->current_time, philo->id), philo->dead = false,
-			pthread_mutex_destroy(philo->right_fork), pthread_mutex_destroy(philo->left_fork), NULL);
-			// 	// }
+		gettimeofday(&now, NULL);
+		diff = (now.tv_sec - end_time.tv_sec) * 1000 + (now.tv_usec - end_time.tv_usec) / 1000; //millisec
+		if (diff > philo->data->time_to_die)
+		return (printf("%d %d died\n", philo->data->current_time, philo->id), philo->is_dead = true, philo->data->stop_program = true, NULL);
 
-			pthread_mutex_destroy(philo->right_fork);
-			pthread_mutex_destroy(philo->left_fork);
-			// 	}
+		printf("%d %d is sleeping\n", philo->data->current_time, philo->id);
+		usleep(philo->data->time_to_sleep * 1000);
+		philo->data->current_time += philo->data->time_to_sleep;
+
+		gettimeofday(&now, NULL);
+		diff = (now.tv_sec - end_time.tv_sec) * 1000 + (now.tv_usec - end_time.tv_usec) / 1000; //millisec
+		if (diff > philo->data->time_to_die)
+		return (printf("%d %d died\n", philo->data->current_time, philo->id), philo->is_dead = true, philo->data->stop_program = true, NULL);
+
+		gettimeofday(&start_time, NULL);
+		printf("%d %d is thinking\n", philo->data->current_time, philo->id);
+		// usleep(5000);
+		gettimeofday(&end_time, NULL);
+		diff = (end_time.tv_sec - start_time.tv_sec) * 1000 + (end_time.tv_usec - start_time.tv_usec) / 1000; //millisec
+		philo->data->current_time += diff;
+
 		if (philo->count_meal == philo->data->number_of_eat)
 		{
-			pthread_mutex_destroy(philo->right_fork);
-			pthread_mutex_destroy(philo->left_fork);
+			philo->data->stop_program = true;
 			return (NULL);
 		}
 	}
-
 	return (NULL);
 }
-// void *routine(void *p)
-// {
-// 	// (void)p;
-// 	struct timeval start_time;
-// 	struct timeval end_time;
-// 	t_data philo = *(t_data *)p;
-
-// 	pthread_mutex_init(&mutex, NULL);
-
-// 	gettimeofday(&start_time, NULL);
-// 	printf("0 1 has taken a fork\n");
-// 	pthread_mutex_lock(&mutex);	//lockして同時アクセスを防ぐ
-// 	printf("0 1 is eating\n");
-// 	usleep(philo.time_to_eat);
-// 	pthread_mutex_unlock(&mutex);
-// 	gettimeofday(&end_time, NULL);
-// 	int diff = (end_time.tv_usec - start_time.tv_usec);
-// 	printf("%d 1 is sleeping\n", philo.time_to_eat);
-// 	printf("%d 1 is thinking\n", philo.time_to_eat + philo.time_to_sleep);
-// 	if (diff > philo.time_to_die)
-// 		printf("%d 1 dead\n", philo.time_to_eat + philo.time_to_sleep);
-// 	pthread_mutex_destroy(&mutex);
-// 	return (NULL);
-// }
 bool	validate_argc(int ac)
 {
 	if (ac == 5 || ac ==  6)
@@ -189,9 +153,6 @@ bool	init_data(t_data *data, int ac, char **av)
 	int	i;
 	int	*argv;
 
-	// philo = calloc(1, sizeof(t_data));
-	// if (!philo)
-	// 	return (false);
 	argv = calloc(ac, sizeof(int));
 	if (!argv)
 		return (free(data), false);
@@ -212,10 +173,11 @@ bool	init_data(t_data *data, int ac, char **av)
 	else
 		data->number_of_eat = 0;
 	data->number_of_fork = data->number_of_philos;
-	data->current_time = 0;
 	data->forks = (pthread_mutex_t *)malloc(data->number_of_fork * sizeof(pthread_mutex_t));
 	if (!data->forks)
 		return (free(argv), false);
+	data->current_time = 0;
+	data->stop_program = false;
 	return (free(argv), true);
 }
 
@@ -229,8 +191,7 @@ t_philo	*create_philo_node(t_data *data)
 	node->data = data;
 	node->last_time_to_eat = 0;
 	node->count_meal = 0;
-	node->current_time = 0;
-	node->dead = false;
+	node->is_dead = false;
 	node->next = NULL;
 	return (node);
 }
@@ -239,7 +200,6 @@ bool	init_philos(t_data *data, t_philo **philos)
 	t_philo	*head;
 	t_philo	*new_node;
 	t_philo	*current;
-
 
 	head = create_philo_node(data);
 	if (!head)
@@ -262,6 +222,8 @@ bool	init_philos(t_data *data, t_philo **philos)
 	temp = head;
 	while (temp != NULL)
 	{
+		temp->left_fork = (pthread_mutex_t *)malloc(1 * sizeof(pthread_mutex_t));
+		temp->right_fork = (pthread_mutex_t *)malloc(1 * sizeof(pthread_mutex_t));
 		temp->left_fork = &(data->forks[i]);
 		if (temp->next == NULL)
 			temp->right_fork = &(data->forks[0]);
@@ -272,6 +234,32 @@ bool	init_philos(t_data *data, t_philo **philos)
 	}
 	*philos = head;
 	return (true);
+}
+
+void	ft_tokdelone(t_philo *philo)
+{
+	if (!philo)
+		return ;
+	free(philo->right_fork);
+	free(philo->left_fork);
+	// ft_free((void **)&philo->text);
+	free(philo);
+}
+
+void	ft_tokclear(t_philo **philos)
+{
+	t_philo	*next;
+
+	if (!philos || !(*philos))
+		return ;
+	while ((*philos))
+	{
+		next = (*philos)->next;
+		ft_tokdelone(*philos);
+		*philos = next;
+	}
+	*philos = NULL;
+	philos = NULL;
 }
 
 int	main(int ac, char **av)
@@ -291,117 +279,65 @@ int	main(int ac, char **av)
 		pthread_mutex_init(&data.forks[i], NULL);
 	if (init_philos(&data, &philos) == false)
 		return (3);
-	printf("philo: %p, data: %p\n", (philos->left_fork), &(data.forks[0]));
 	// th = (pthread_t *)malloc(sizeof(pthread_t) * data.number_of_philos);
 	// if (!th)
 	// 	perror("th");
 	pthread_t	th[data.number_of_philos];
-
+	pthread_t	monitor;
+	if (pthread_create(&monitor, NULL, &monitoring, philos) != 0)
+	{
+		perror("thread1");
+		return (1);
+	}
 	i = 0;
 	current = philos;
 	while (current)
 	{
-		// printf("Thread %d has started\n", current->id);
-
+		pthread_mutex_init(current->right_fork, NULL);
+		pthread_mutex_init(current->left_fork, NULL);
 		if (pthread_create(th + i, NULL, &routine, current) != 0)
 		{
-			perror("thread");
+			perror("thread2");
 			return (1);
 		}
 		current = current->next;
 		i++;
 	}
-
 	i = 0;
-	while (i < data.number_of_philos)
+	if (philos->data->stop_program == true)
 	{
-		if (pthread_join(th[i], NULL) != 0)
+		while (i < data.number_of_philos)
 		{
-			perror("thread");
-			return (1);
+			if (pthread_join(th[i], NULL) != 0)
+			{
+				perror("thread3");
+				return (1);
+			}
+			printf("Thread %d has finished\n", i + 1);
+			i++;
 		}
-		printf("Thread %d has finished\n", i + 1);
+	}
+	if (pthread_join(monitor, NULL) != 0)
+	{
+		perror("thread4");
+		return (1);
+	}
+	while (th[i])
+	{
+		free(&th[i]);
 		i++;
 	}
-	i = 0;
-	// while (th[i])
-	// {
-	// 	free(&th[i]);
-	// 	i++;
-	// }
-	// pthread_create(&th[0], NULL, routine, &data);
-	// printf("Thread 1 has started\n");
-	// pthread_create(&th[1], NULL, routine, &data);
-	// printf("Thread 2 has started\n");
-	// pthread_join(th[0], NULL);
-	// pthread_join(th[1], NULL);
+	current = philos;
+	// ft_tokclear(&philos);
+	while (current)
+	{
+		// pthread_mutex_destroy(current->right_fork);
+		// pthread_mutex_destroy(current->left_fork);
+		ft_tokdelone(current);
+		current = current->next;
+	}
+	free(philos);
+	for (int i = 0; i < data.number_of_philos; i++)
+		pthread_mutex_destroy(&data.forks[i]);
 	return (0);
-	// pthread_t th[philo->number_of_philos];
-	// int i = 0;
-	// while (i < philo->number_of_philos)
-	// {
-	// 	if (pthread_create(th + i, NULL, &routine, &philo) != 0)
-	// 	{
-	// 		perror("thread");
-	// 		return (1);
-	// 	}
-	// 	printf("Thread %d has started\n", i);
-	// 	i++;
-	// }
-	// i = 0;
-	// while (i < philo->number_of_philos)
-	// {
-	// 	if (pthread_join(th[i], NULL) != 0)
-	// 	{
-	// 		perror("thread");
-	// 		return (1);
-	// 	}
-	// 	printf("Thread %d has finished\n", i);
-	// 	i++;
-	// }
 }
-
-// int main(void)
-// {
-// 	struct timeval time1;
-//     struct timeval time2;
-//     int diff_time;
-
-//     gettimeofday(&time1, NULL);
-// //    printf("sec: %d, usec: %d\n", (int)time1.tv_sec, (int)time1.tv_usec);
-
-//     /** Describe Function for Measurement of time **/
-
-
-	// pthread_t th[1];
-	// pthread_mutex_init(&mutex, NULL);
-	// int i = 0;
-	// while (i < 4)
-	// {
-	// 	if (pthread_create(th + i, NULL, &routine, NULL) != 0)
-	// 	{
-	// 		perror("thread");
-	// 		return (1);
-	// 	}
-	// 	printf("Thread %d has started\n", i);
-	// 	i++;
-	// }
-	// i = 0;
-	// while (i < 4)
-	// {
-	// 	if (pthread_join(th[i], NULL) != 0)
-	// 	{
-	// 		perror("thread");
-	// 		return (1);
-	// 	}
-	// 	printf("Thread %d has finished\n", i);
-	// 	i++;
-	// }
-// 	gettimeofday(&time2, NULL);
-// 	printf("sec: %d, usec: %d\n", (int)time1.tv_usec, (int)time2.tv_usec);
-
-// 	diff_time = time2.tv_usec - time1.tv_usec +  (int)(time2.tv_usec - time1.tv_usec) / 1000000;
-// 	printf("diff: %d[s]\n", diff_time);
-// 	pthread_mutex_destroy(&mutex);
-// 	printf("cnt -> %d\n", cnt);
-// }
