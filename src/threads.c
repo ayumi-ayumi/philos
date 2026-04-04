@@ -6,16 +6,16 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:44:22 by asato             #+#    #+#             */
-/*   Updated: 2026/04/03 17:55:36 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/04 15:31:50 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philo.h"
 
 
-void *routine(void *arg)
+void	*routine(void *arg)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 != 0)
@@ -27,7 +27,7 @@ void *routine(void *arg)
 		if (rest(philo) == 1)
 			break ;
 		think(philo);
-		usleep(500);
+		usleep(700);
 	}
 	return (NULL);
 }
@@ -44,11 +44,27 @@ bool	start_threads(t_data *data)
 	while (i < data->philo_count)
 	{
 		if (pthread_create(&data->philos[i].thread, NULL, &routine, &data->philos[i]) != 0)
+		{
+			pthread_mutex_lock(&data->stop_mutex);
+			data->stop_flag = 1;
+			pthread_mutex_unlock(&data->stop_mutex);
+			while (i > 0)
+				pthread_join(data->philos[--i].thread, NULL);
+			pthread_join(monitor, NULL);
 			return (false);
+		}
 		i++;
 	}
 	if (pthread_join(monitor, NULL) != 0)
+	{
+		pthread_mutex_lock(&data->stop_mutex);
+		data->stop_flag = 1;
+		pthread_mutex_unlock(&data->stop_mutex);
+		i = 0;
+		while (i < data->philo_count)
+			pthread_join(data->philos[i++].thread, NULL);
 		return (false);
+	}
 	i = 0;
 	while (i < data->philo_count)
 	{
@@ -57,3 +73,27 @@ bool	start_threads(t_data *data)
 	}
 	return (true);
 }
+// bool	start_threads(t_data *data)
+// {
+// 	pthread_t	monitor;
+// 	int			i;
+
+// 	if (pthread_create(&monitor, NULL, &monitor_loop, data) != 0)
+// 		return (cleanup(data), false);
+// 	i = 0;
+// 	while (i < data->philo_count)
+// 	{
+// 		if (pthread_create(&data->philos[i].thread, NULL, &routine, &data->philos[i]) != 0)
+// 			return (cleanup(data), pthread_join(monitor, NULL), false);
+// 		i++;
+// 	}
+// 	if (pthread_join(monitor, NULL) != 0)
+// 		return (false);
+// 	i = 0;
+// 	while (i < data->philo_count)
+// 	{
+// 		if (pthread_join(data->philos[i++].thread, NULL) != 0)
+// 			return (false);
+// 	}
+// 	return (true);
+// }

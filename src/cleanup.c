@@ -6,12 +6,11 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:53:52 by asato             #+#    #+#             */
-/*   Updated: 2026/04/03 17:54:35 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/04 15:48:13 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philo.h"
-
 
 void	cleanup(t_data *data)
 {

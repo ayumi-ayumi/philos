@@ -6,7 +6,7 @@
 #    By: asato <asato@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/07 19:31:56 by asato             #+#    #+#              #
-#    Updated: 2026/04/03 18:02:42 by asato            ###   ########.fr        #
+#    Updated: 2026/04/04 16:58:31 by asato            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC 	=	main.c \
 			threads.c \
 			actions.c \
 			cleanup.c \
-			ascii.c
+			libft.c \
 
 SRCS	=	$(addprefix $(SRC_DIR)/, $(SRC))
 OBJ	=	$(SRC:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:26:44 by asato             #+#    #+#             */
-/*   Updated: 2026/04/03 18:03:30 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/04 16:57:59 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <string.h>
+# include <pthread.h>
 
 typedef struct s_data t_data;
 typedef struct s_philo t_philo;
@@ -51,64 +52,54 @@ typedef struct s_data
 	t_philo				*philos;
 }				t_data;
 
-#define ERR_INPUT "Invalid input\n"
-#define ERR_ARGS "Usage: ./philo <number_of_philosophers> <time_to_die> \
+# define ERR_INPUT "Invalid input\n"
+# define ERR_ARGS "Usage: ./philo <number_of_philosophers> <time_to_die> \
 <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]\n"
-#define ERR_INIT_DATA "Data structure initialization failed\n"
-#define ERR_INIT_PHILO "Philosopher structure initialization failed\n"
-#define ERR_THREAD "Failed threading"
+# define ERR_INIT_DATA "Data structure initialization failed\n"
+# define ERR_INIT_PHILO "Philosopher structure initialization failed\n"
+# define ERR_THREAD "Failed threading"
 
-void	print_ascii(void);
-
-/* Validate Args */
-bool	validate_arg_count(int ac);
+# define TAKE_FORK "has taken a fork\n"
+# define EAT "is eating\n"
+# define SLEEP "is sleeping\n"
+# define THINK "is thinking\n"
+# define DIED "died\n"
 
 /* Init */
-bool	init_data(t_data *data, int ac, char **av);
-bool	init_mutex(t_data *data);
-bool	init_philos(t_data *data);
+bool		init_data(t_data *data, char **av);
+bool		init_mutex(t_data *data);
+bool		init_philos(t_data *data);
 
 /* Threads */
-bool	start_threads(t_data *data);
-void *routine(void *arg);
+bool		start_threads(t_data *data);
+void		*routine(void *arg);
 
 /* Actions */
-int	eat(t_philo *philo);
-int	take_forks(t_philo *philo);
-void	release_forks(t_philo *philo);
-
-
-int	rest(t_philo *philo);
-void	think(t_philo *philo);
-
+int			eat(t_philo *philo);
+void		take_forks(t_philo *philo);
+void		release_forks(t_philo *philo);
+int			rest(t_philo *philo);
+void		think(t_philo *philo);
 
 /* Monitor */
-void *monitor_loop(void *arg);
-int	is_stopped(t_philo *philo);
-int	all_philos_ate_enough(t_data *data);
-int	has_philo_died(t_data *data);
+void		*monitor_loop(void *arg);
+int			is_stopped(t_philo *philo);
+int			all_philos_ate_enough(t_data *data);
+int			has_philo_died(t_data *data);
 
-
-
+/* libft */
+size_t		ft_strlen(const char *s);
+int			ft_isdigit(int c);
+int			ft_sleep(t_philo *philo, int time);
+int			ft_atoi(char *str);
 
 /* Utils*/
-void	print_error(char *msg);
-size_t	ft_strlen(const char *s);
-int	ft_isdigit(int c);
-int	ft_sleep(t_philo *philo, int time);
-int ft_atoi(char *str);
-long long	get_current_time();
-long long	get_timestamp(t_data data);
-
+long long	get_current_time(void);
+int			is_stopped(t_philo *philo);
+long long	get_timestamp(t_data *data);
 
 /* Clean Up*/
-void	cleanup(t_data *data);
-void	destroy_mutex(t_data *data);
+void		cleanup(t_data *data);
+void		destroy_mutex(t_data *data);
 
-
-
-# include <stdio.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
 #endif
