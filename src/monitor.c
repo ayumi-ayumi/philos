@@ -6,13 +6,13 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:55:02 by asato             #+#    #+#             */
-/*   Updated: 2026/04/04 16:38:22 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:19:16 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
-int	all_philos_ate_enough(t_data *data)
+static t_routine_loop	all_philos_ate_enough(t_data *data)
 {
 	int	count;
 	int	i;
@@ -32,16 +32,16 @@ int	all_philos_ate_enough(t_data *data)
 		if (count == data->philo_count)
 		{
 			pthread_mutex_lock(&data->stop_mutex);
-			if (data->stop_flag == 0)
-				data->stop_flag = 1;
+			if (data->stop_flag == false)
+				data->stop_flag = true;
 			pthread_mutex_unlock(&data->stop_mutex);
-			return (1);
+			return (STOP);
 		}
 	}
-	return (0);
+	return (CONTINUE);
 }
 
-int	has_philo_died(t_data *data)
+static t_routine_loop	has_philo_died(t_data *data)
 {
 	int	i;
 
@@ -49,25 +49,25 @@ int	has_philo_died(t_data *data)
 	while (i < data->philo_count)
 	{
 		pthread_mutex_lock(&data->meal_mutex);
-		if (get_current_time() - data->philos[i].last_meal_time_ms
-			>= data->time_to_die_ms)
+		if (get_current_time()
+			- data->philos[i++].last_meal_time_ms >= data->time_to_die_ms)
 		{
 			pthread_mutex_unlock(&data->meal_mutex);
 			pthread_mutex_lock(&data->stop_mutex);
 			pthread_mutex_lock(&data->print_lock);
-			if (data->stop_flag == 0)
+			if (data->stop_flag == false)
 			{
-				data->stop_flag = 1;
-				printf("%lld %d %s", get_timestamp(data), data->philos[i].id, DIED);
+				data->stop_flag = true;
+				printf("%lld %d %s", get_timestamp(data), data->philos[i].id,
+					DIED);
 			}
 			pthread_mutex_unlock(&data->print_lock);
 			pthread_mutex_unlock(&data->stop_mutex);
-			return (1);
+			return (STOP);
 		}
 		pthread_mutex_unlock(&data->meal_mutex);
-		i++;
 	}
-	return (0);
+	return (CONTINUE);
 }
 
 void	*monitor_loop(void *arg)
@@ -75,6 +75,8 @@ void	*monitor_loop(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
+	if (!data || !data->philos)
+		return (NULL);
 	while (1)
 	{
 		if (has_philo_died(data) || all_philos_ate_enough(data))

@@ -6,11 +6,11 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:29:01 by asato             #+#    #+#             */
-/*   Updated: 2026/04/04 17:01:15 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:08:21 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 static bool	validate_numeric_args(char **av)
 {
@@ -47,16 +47,16 @@ int	main(int ac, char **av)
 	t_data	data;
 
 	if (ac != 5 && ac != 6)
-		return (print_error(ERR_ARGS), 1);
+		return (print_error(ERR_ARGS), EXIT_FAILURE);
 	data = (t_data){0};
 	if (validate_numeric_args(av) == false)
-		return (print_error(ERR_INPUT), 1);
+		return (print_error(ERR_INPUT), EXIT_FAILURE);
 	if (init_data(&data, &av[1]) == false)
-		return (print_error(ERR_INIT_DATA), 1);
+		return (print_error(ERR_INIT_DATA), EXIT_FAILURE);
 	if (init_philos(&data) == false)
-		return (print_error(ERR_INIT_PHILO), cleanup(&data), 1);
+		return (print_error(ERR_INIT_PHILO), cleanup(&data), EXIT_FAILURE);
 	if (start_threads(&data) == false)
-		return (print_error(ERR_THREAD), cleanup(&data), 1);
+		return (print_error(ERR_THREAD), cleanup(&data), EXIT_FAILURE);
 	cleanup(&data);
-	return (0);
+	return (EXIT_SUCCESS);
 }

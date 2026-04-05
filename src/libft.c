@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 12:36:32 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 08:57:51 by Ayumi            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:07:46 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -22,12 +22,12 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-int	ft_isdigit(int c)
+bool	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
-		return (1);
+		return (true);
 	else
-		return (0);
+		return (false);
 }
 
 int	ft_atoi(char *str)
@@ -55,16 +55,16 @@ int	ft_atoi(char *str)
 	return (nbr * sign);
 }
 
-int	ft_sleep(t_philo *philo, long long milliseconds)
+t_routine_loop	ft_sleep(t_philo *philo, long long milliseconds)
 {
 	long long	start;
 
 	start = get_current_time();
 	while (get_current_time() - start < milliseconds)
 	{
-		if (is_stopped(philo) == 1)
-			return (1);
+		if (is_stopped(philo) == true)
+			return (STOP);
 		usleep(500);
 	}
-	return (0);
+	return (CONTINUE);
 }

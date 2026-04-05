@@ -6,7 +6,7 @@
 #    By: asato <asato@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/07 19:31:56 by asato             #+#    #+#              #
-#    Updated: 2026/04/04 16:58:31 by asato            ###   ########.fr        #
+#    Updated: 2026/04/05 18:35:49 by asato            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,13 @@ INC		=	-I$(INC_DIR)
 
 SRC 	=	main.c \
 			init.c \
-			utils.c \
-			monitor.c \
 			threads.c \
+			monitor.c \
 			actions.c \
+			forks.c \
 			cleanup.c \
 			libft.c \
+			utils.c \
 
 SRCS	=	$(addprefix $(SRC_DIR)/, $(SRC))
 OBJ	=	$(SRC:.c=.o)

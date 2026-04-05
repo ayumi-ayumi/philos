@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:53:52 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 09:28:36 by Ayumi            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:34:51 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 void	cleanup(t_data *data)
 {
