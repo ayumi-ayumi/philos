@@ -6,7 +6,7 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:55:02 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:51:42 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 19:42:02 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ static t_routine_loop	all_philos_ate_enough(t_data *data)
 	return (CONTINUE);
 }
 
+static void	print_death(t_data *data, int i)
+{
+	pthread_mutex_lock(&data->stop_mutex);
+	pthread_mutex_lock(&data->print_lock);
+	if (data->stop_flag == false)
+	{
+		data->stop_flag = true;
+		printf("%lld %d %s", get_timestamp(data), data->philos[i].id, DIED);
+	}
+	pthread_mutex_unlock(&data->print_lock);
+	pthread_mutex_unlock(&data->stop_mutex);
+}
+
 static t_routine_loop	has_philo_died(t_data *data)
 {
 	int	i;
@@ -50,22 +63,14 @@ static t_routine_loop	has_philo_died(t_data *data)
 	{
 		pthread_mutex_lock(&data->meal_mutex);
 		if (get_current_time()
-			- data->philos[i++].last_meal_time_ms >= data->time_to_die_ms)
+			- data->philos[i].last_meal_time_ms >= data->time_to_die_ms)
 		{
 			pthread_mutex_unlock(&data->meal_mutex);
-			pthread_mutex_lock(&data->stop_mutex);
-			pthread_mutex_lock(&data->print_lock);
-			if (data->stop_flag == false)
-			{
-				data->stop_flag = true;
-				printf("%lld %d %s", get_timestamp(data), data->philos[i].id,
-					DIED);
-			}
-			pthread_mutex_unlock(&data->print_lock);
-			pthread_mutex_unlock(&data->stop_mutex);
+			print_death(data, i);
 			return (STOP);
 		}
 		pthread_mutex_unlock(&data->meal_mutex);
+		i++;
 	}
 	return (CONTINUE);
 }

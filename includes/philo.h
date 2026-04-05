@@ -6,7 +6,7 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:26:44 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:51:30 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 19:42:25 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void					single_philo_routine(t_philo *philo);
 t_routine_loop			rest(t_philo *philo);
 void					think(t_philo *philo);
 void					print_log(t_philo *philo, char *msg);
-
 
 /* libft */
 size_t					ft_strlen(const char *s);
