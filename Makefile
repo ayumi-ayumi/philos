@@ -6,15 +6,13 @@
 #    By: asato <asato@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/07 19:31:56 by asato             #+#    #+#              #
-#    Updated: 2026/04/05 18:35:49 by asato            ###   ########.fr        #
+#    Updated: 2026/04/05 19:48:55 by asato            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo
 CC	=	cc
-CFLAGS	=	-Wall -Wextra -Werror -ggdb3
-# CFLAGS	=	-fsanitize=leak -Wall -Wextra -Werror
-# CFLAGS	=	-fsanitize=thread -Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror
 SRC_DIR	=	src
 OBJ_DIR	=	obj
 INC_DIR	=	includes
