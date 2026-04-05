@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 12:36:32 by asato             #+#    #+#             */
-/*   Updated: 2026/04/04 16:53:18 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 08:57:51 by Ayumi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ int	ft_atoi(char *str)
 	return (nbr * sign);
 }
 
-int	ft_sleep(t_philo *philo, int time)
+int	ft_sleep(t_philo *philo, long long milliseconds)
 {
 	long long	start;
 
 	start = get_current_time();
-	while (get_current_time() - start < (long long)time)
+	while (get_current_time() - start < milliseconds)
 	{
 		if (is_stopped(philo) == 1)
 			return (1);

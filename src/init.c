@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:31:56 by asato             #+#    #+#             */
-/*   Updated: 2026/04/04 15:08:18 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 09:34:09 by Ayumi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,35 @@ bool	init_philos(t_data *data)
 	return (true);
 }
 
+void	destroy_forks(t_data *data, int i)
+{
+	while (--i >= 0)
+		pthread_mutex_destroy(&data->fork_mutex[i]);
+	free(data->fork_mutex);
+	data->fork_mutex = NULL;	
+}
+
 bool	init_mutex(t_data *data)
 {
 	int	i;
 
-	i = 0;
 	data->fork_mutex = malloc(data->fork_count * sizeof(pthread_mutex_t));
 	if (!data->fork_mutex)
 		return (false);
+	i = 0;
 	while (i < data->fork_count)
-		pthread_mutex_init(&data->fork_mutex[i++], NULL);
-	pthread_mutex_init(&data->stop_mutex, NULL);
-	pthread_mutex_init(&data->meal_mutex, NULL);
-	pthread_mutex_init(&data->print_lock, NULL);
+	{
+		if (pthread_mutex_init(&data->fork_mutex[i++], NULL) != 0)
+			return (destroy_forks(data, i), false);
+	}
+	if (pthread_mutex_init(&data->stop_mutex, NULL) != 0)
+		return (destroy_forks(data, i), false);
+	if (pthread_mutex_init(&data->meal_mutex, NULL) != 0)
+		return (destroy_forks(data, i), 
+		pthread_mutex_destroy(&data->stop_mutex), false);
+	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
+		return (destroy_forks(data, i), pthread_mutex_destroy(&data->stop_mutex), 
+		pthread_mutex_destroy(&data->meal_mutex), false);
 	return (true);
 }
 

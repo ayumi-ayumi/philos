@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:26:44 by asato             #+#    #+#             */
-/*   Updated: 2026/04/04 16:57:59 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 09:32:34 by Ayumi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int			has_philo_died(t_data *data);
 /* libft */
 size_t		ft_strlen(const char *s);
 int			ft_isdigit(int c);
-int			ft_sleep(t_philo *philo, int time);
+int			ft_sleep(t_philo *philo, long long milliseconds);
 int			ft_atoi(char *str);
 
 /* Utils*/
