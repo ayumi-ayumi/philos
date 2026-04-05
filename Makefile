@@ -6,7 +6,7 @@
 #    By: asato <asato@student.42berlin.de>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/07 19:31:56 by asato             #+#    #+#              #
-#    Updated: 2026/03/27 18:13:15 by asato            ###   ########.fr        #
+#    Updated: 2026/04/05 18:35:49 by asato            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,14 @@ INC_DIR	=	includes
 INC		=	-I$(INC_DIR)
 
 SRC 	=	main.c \
-			ascii.c
+			init.c \
+			threads.c \
+			monitor.c \
+			actions.c \
+			forks.c \
+			cleanup.c \
+			libft.c \
+			utils.c \
 
 SRCS	=	$(addprefix $(SRC_DIR)/, $(SRC))
 OBJ	=	$(SRC:.c=.o)
@@ -40,8 +47,6 @@ BUILD_LINE = ==========[ PHILO BUILD ]==========
 CLEAN_LINE = ==========[ PHILO CLEAN ]==========
 
 all: $(NAME)
-
-
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) \
