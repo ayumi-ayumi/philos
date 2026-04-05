@@ -45,13 +45,15 @@ Examples:
 
 ### Output
 The program prints timestamped status lines describing philosopher actions, such as:
-- `has taken a fork`
-- `is eating`
-- `is sleeping`
-- `is thinking`
-- `died`
+- `timestamp_in_ms X has taken a fork`
+- `timestamp_in_ms X is eating`
+- `timestamp_in_ms X is sleeping`
+- `timestamp_in_ms X is thinking`
+- `timestamp_in_ms X died`
 
 ## Resources
+- [philosophers-visualizer](https://github.com/nafuka11/philosophers-visualizer)
+- [philosopers playlist on YouTube](https://youtube.com/playlist?list=PLGU1kcPKHMKi41Py2kqxdvqYE3M9VhCHe&si=fPHN33C_dbVwci8P)
 
 ### Dining Philosophers / Concurrency references
 - The Dining Philosophers problem (concept and common solution strategies)
@@ -63,7 +65,4 @@ The program prints timestamped status lines describing philosopher actions, such
 ### AI usage
 AI was used to:
 - Draft and edit this `README.md` (structure, English wording, and a concise explanation of the project goal).
-- Infer the build/run interface by reading the repository’s `Makefile` and `includes/philos.h` usage string.
-
-AI was not used to:
-- Implement the project’s synchronization logic, thread routines, or core C source code (unless explicitly stated elsewhere by the author).
+- Suggest clearer naming for functions and variables based on common best practices.
