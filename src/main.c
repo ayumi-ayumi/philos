@@ -6,11 +6,11 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:29:01 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:08:21 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:39:40 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philos.h"
 
 static bool	validate_numeric_args(char **av)
 {

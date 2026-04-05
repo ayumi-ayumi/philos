@@ -6,15 +6,15 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:53:52 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:34:51 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:41:57 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philos.h"
 
 void	cleanup(t_data *data)
 {
-	if (!data)
+	if (!data || !data->philos)
 		return ;
 	destroy_mutex(data);
 	free(data->philos);
@@ -25,7 +25,7 @@ void	destroy_mutex(t_data *data)
 {
 	int	i;
 
-	if (!data)
+	if (!data || !data->fork_mutex)
 		return ;
 	i = 0;
 	if (data->fork_mutex)

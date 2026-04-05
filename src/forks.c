@@ -6,11 +6,11 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:51:29 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:06:19 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:39:40 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philos.h"
 
 void	release_forks(t_philo *philo)
 {

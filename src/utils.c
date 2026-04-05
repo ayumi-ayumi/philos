@@ -6,11 +6,11 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:36:34 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 17:58:15 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:39:40 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philos.h"
 
 long long	get_timestamp(t_data *data)
 {

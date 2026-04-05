@@ -6,12 +6,12 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:26:44 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:37:35 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:39:23 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILOS_H
+# define PHILOS_H
 
 # include <pthread.h>
 # include <stdbool.h>

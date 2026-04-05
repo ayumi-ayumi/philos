@@ -6,11 +6,11 @@
 /*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 12:36:32 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:07:46 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/05 18:39:40 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philos.h"
 
 size_t	ft_strlen(const char *s)
 {
