@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:26:44 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 19:42:25 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/06 11:58:46 by Ayumi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_data
 	int					must_eat_count;
 	int					fork_count;
 	long long			start_time_ms;
-	int					stop_flag;
+	bool				stop_flag;
 	pthread_mutex_t		stop_mutex;
 	pthread_mutex_t		meal_mutex;
 	pthread_mutex_t		print_lock;
@@ -58,7 +58,7 @@ typedef enum e_routine_loop
 	CONTINUE = 0
 }						t_routine_loop;
 
-# define ERR_INPUT "Invalid input\n"
+# define ERR_INPUT "Input must be positive integers\n"
 # define ERR_ARGS \
 	"Usage: ./philo <number_of_philosophers> <time_to_die> \
 <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]\n"
@@ -79,8 +79,7 @@ bool					init_philos(t_data *data);
 /* Threads */
 bool					start_threads(t_data *data);
 
-/* Routines */
-void					*routine(void *arg);
+/* Monitor */
 void					*monitor_loop(void *arg);
 
 /* Actions */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:31:56 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:51:42 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/06 11:49:12 by Ayumi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ bool	init_data(t_data *data, char **av)
 		data->must_eat_count = -1;
 	data->fork_count = data->philo_count;
 	data->start_time_ms = get_current_time();
-	data->stop_flag = 0;
+	data->stop_flag = false;
 	if (init_mutex(data) == false)
 		return (false);
 	data->philos = malloc(data->philo_count * sizeof(t_philo));

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
+/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/03 17:44:22 by asato             #+#    #+#             */
-/*   Updated: 2026/04/05 18:51:42 by asato            ###   ########.fr       */
+/*   Updated: 2026/04/06 11:58:25 by Ayumi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*routine(void *arg)
+static void	*routine(void *arg)
 {
 	t_philo	*philo;
 
