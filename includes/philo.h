@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Ayumi <Ayumi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: asato <asato@student.42berlin.de>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 13:26:44 by asato             #+#    #+#             */
-/*   Updated: 2026/04/06 11:58:46 by Ayumi            ###   ########.fr       */
+/*   Updated: 2026/04/07 09:48:10 by asato            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef enum e_routine_loop
 	STOP = 1,
 	CONTINUE = 0
 }						t_routine_loop;
-
+/* Error messages */
 # define ERR_INPUT "Input must be positive integers\n"
 # define ERR_ARGS \
 	"Usage: ./philo <number_of_philosophers> <time_to_die> \
@@ -66,6 +66,7 @@ typedef enum e_routine_loop
 # define ERR_INIT_PHILO "Philosopher structure initialization failed\n"
 # define ERR_THREAD "Failed threading"
 
+/* Macros for actions */
 # define TAKE_FORK "has taken a fork\n"
 # define EAT "is eating\n"
 # define SLEEP "is sleeping\n"
